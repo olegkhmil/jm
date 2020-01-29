@@ -1,6 +1,7 @@
 package servlets;
 
 import exception.DBException;
+import model.User;
 import service.UserServiceHibernate;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/add")
 public class AddUser extends HttpServlet {
@@ -25,11 +27,13 @@ public class AddUser extends HttpServlet {
             String email = req.getParameter("email");
             String password = req.getParameter("password");
             if (UserServiceHibernate.getInstanceUSH().addUser(name, age, email, password)) {
-                req.setAttribute("result", "Success");
+                List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
+                req.setAttribute("usersFromDB", users);
+                req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
             } else {
-                req.setAttribute("result", "User with email:" + email + " exists");
+                resp.setStatus(200);
+                req.setAttribute("result", "User with email: " + email + " exists");
             }
-            resp.setStatus(200);
             req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
         } catch (NumberFormatException e) {
             resp.setStatus(400);

@@ -11,24 +11,15 @@
         <td style="border: 1px solid black; text-align: center">
             <a href="${pageContext.servletContext.contextPath}/all">All users</a>
         </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/WEB-INF/view/add.jsp">Add new user</a>//!! не работает!!
-        </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/delete">Delete user</a>
-        </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/update">Update user</a>
-        </td>
     </tr>
 </table>
 <form action="${pageContext.servletContext.contextPath}/update" method="post">
+    <input type="hidden" name="id" value="${user.id}">
     <p align="center">
-        ID: <input type="text" name="id"/>
-        Name: <input type="text" name="name"/>
-        Age: <input type="text" name="age"/>
-        Email: <input type="text" name="email"/>
-        Password: <input type="password" name="password"><br/>
+        Name: <input type="text" name="name" value="${user.name}"/><br/>
+        Age: <input type="number" name="age" value="${user.age}"/><br/>
+        Email: <input type="text" name="email" value="${user.email}"/><br/>
+        Password: <input type="password" name="password" value="${user.password}"><br/>
         <input type="submit" value="Submit"/>
     </p>
 </form>

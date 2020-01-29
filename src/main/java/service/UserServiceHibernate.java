@@ -28,6 +28,11 @@ public class UserServiceHibernate implements UserService {
     }
 
     @Override
+    public User getUserById(Long id) throws DBException {
+        return userHibernateDAO.getUserById(id);
+    }
+
+    @Override
     public boolean addUser(String name, int age, String email, String password) throws DBException {
         if (userHibernateDAO.getUserByEmail(email) == null) {
             return userHibernateDAO.createUser(name, age, email, password) > 0;

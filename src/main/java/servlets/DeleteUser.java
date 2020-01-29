@@ -1,6 +1,7 @@
 package servlets;
 
 import exception.DBException;
+import model.User;
 import service.UserService;
 import service.UserServiceHibernate;
 import service.UserServiceJDBC;
@@ -11,27 +12,34 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/delete")
 public class DeleteUser extends HttpServlet {
     private UserService userService = UserServiceHibernate.getInstanceUSH();
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/view/delete.jsp").forward(req, resp);
-    }
+
+//    @Override
+//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        req.getRequestDispatcher("/WEB-INF/view/delete.jsp").forward(req, resp);
+//    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            Long id = Long.parseLong(req.getParameter("id"));
-            if (userService.deleteUser(id)) {
-                req.setAttribute("result", "Success");
-            } else {
-                req.setAttribute("result", "User don't exists");
-            }
-            resp.setStatus(200);
-            req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
+        String param = req.getParameter("id");
 
+        try {
+            Long id =
+                    Long.parseLong(
+                            req.getParameter("id"));
+            if (userService.deleteUser(id)) {
+                List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
+                req.setAttribute("usersFromDB", users);
+                req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
+            } else {
+                resp.setStatus(200);
+                req.setAttribute("result", "User don't exists");
+                req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
+            }
         } catch (NumberFormatException e) {
             resp.setStatus(400);
             req.setAttribute("result", "incorrect id (please use only numbers)");

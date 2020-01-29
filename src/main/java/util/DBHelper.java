@@ -48,7 +48,7 @@ public class DBHelper {
     private static Configuration getMySqlConfiguration() {
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
-        Path propFile = Paths.get("C:\\ideaProj\\jm_study\\pp\\pp2(3)\\src\\main\\resourses\\db.properties");
+        Path propFile = Paths.get("C:\\ideaProj\\jm_study\\part1\\src\\main\\resourses\\db.properties");
         Properties properties = PropertyReader.getProperties(propFile.toAbsolutePath().toString());
 
         configuration.setProperty("hibernate.dialect", properties.getProperty("dialect"));

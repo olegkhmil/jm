@@ -11,15 +11,6 @@
         <td style="border: 1px solid black; text-align: center">
             <a href="${pageContext.servletContext.contextPath}/all">All users</a>
         </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/add">Add new user</a>//!! не работает!!
-        </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/delete">Delete user</a>
-        </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/update">Update user</a>
-        </td>
     </tr>
 </table>
 <h1 align="center">Result: ${result}</h1>

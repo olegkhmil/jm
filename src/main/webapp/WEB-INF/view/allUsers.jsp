@@ -19,16 +19,10 @@
         <td style="border: 1px solid black; text-align: center">
             <a href="${pageContext.servletContext.contextPath}/add">Add new user</a>
         </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/delete">Delete user</a>
-        </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/update">Update user</a>
-        </td>
     </tr>
 </table>
 
-<p align="center">Hello from JSP</p>
+<p align="center">All Users</p>
 <table align="center" border="1px">
     <tr>
         <th>User Id</th>
@@ -36,8 +30,7 @@
         <th>User Age</th>
         <th>User email</th>
         <th>password</th>
-        <th>Action</th>
-
+        <th colspan="2">Action</th>
     </tr>
 
     <c:forEach var="user" items="${usersFromDB}">
@@ -48,10 +41,17 @@
             <td>${user.email}</td>
             <td>${user.password}</td>
             <td>
-                <a href="${pageContext.servletContext.contextPath}/delete">Delete user</a>
-                <a href="${pageContext.servletContext.contextPath}/update">Update user</a>
+                <form action="${pageContext.servletContext.contextPath}/delete" method="post">
+                    <input type="number" hidden name="id" value="${user.id}"/>
+                    <input type="submit" value="Delete"/>
+                </form>
             </td>
-
+            <td>
+                <form action="${pageContext.servletContext.contextPath}/update" method="get">
+                    <input type="number" hidden name="id" value="${user.id}"/>
+                    <input type="submit" value="Update"/>
+                </form>
+            </td>
         </tr>
     </c:forEach>
 </table>

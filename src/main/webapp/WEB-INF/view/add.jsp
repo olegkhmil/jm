@@ -11,23 +11,13 @@
         <td style="border: 1px solid black; text-align: center">
             <a href="${pageContext.servletContext.contextPath}/all">All users</a>
         </td>
-        <td style="border: 1px solid black; text-align: center">
-<%--            <a href="${pageContext.servletContext.contextPath}/WEB-INF/view/add.jsp">Add new user</a>//error--%>
-            <a href="${pageContext.servletContext.contextPath}/add">Add user</a>
-        </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/delete">Delete user</a>
-        </td>
-        <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/update">Update user</a>
-        </td>
     </tr>
 </table>
 <form action="${pageContext.servletContext.contextPath}/add" method="POST">
     <p align="center">
-        Name: <input type="text" name="name"/>
-        Age: <input type="text" name="age"/>
-        Email: <input type="text" name="email"/>
+        Name: <input type="text" name="name"/><br/>
+        Age: <input type="text" name="age"/><br/>
+        Email: <input type="text" name="email"/><br/>
         Password: <input type="password" name="password"><br/>
         <input type="submit" value="Submit"/>
     </p>

@@ -23,6 +23,11 @@ public class UserServiceJDBC implements UserService {
         return userDAO.readAllUsers();  //may return null
     }
 
+    @Override
+    public User getUserById(Long id) throws DBException {
+        return userDAO.getUserById(id);
+    }
+
     public boolean addUser(String name, int age, String email, String password) throws DBException {
             if (userDAO.getUserByEmail(email) == null) {
                 userDAO.createUser(name, age, email, password);
