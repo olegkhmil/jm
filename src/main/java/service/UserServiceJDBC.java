@@ -1,22 +1,36 @@
 package service;
 
 import dao.UserDAO;
+import daoFactory.UserDaoFactory;
 import exception.DBException;
 import model.User;
 import dao.UserJdbcDAO;
+import util.PropertyReader;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
 public class UserServiceJDBC implements UserService {
     private static UserServiceJDBC userServiceJDBC;
-
-    private UserDAO userDAO = getUserDAO();
-
+    private UserDAO userDAO;
 
     private UserServiceJDBC() {
+        UserDaoFactory userDaoFactory = new UserDaoFactory();
+        Path propFile = Paths.get("C:\\ideaProj\\jm_study\\part1\\src\\main\\resources\\db.properties");
+        Properties properties = PropertyReader.getProperties(propFile.toAbsolutePath().toString());
+        userDAO = userDaoFactory.getUserDAO(properties.getProperty("daoTypeJ"));
+    }
+
+    public static UserServiceJDBC getInstance(){
+        if(userServiceJDBC == null){
+            userServiceJDBC = new UserServiceJDBC();
+        }
+        return userServiceJDBC;
     }
 
     public List<User> getAllUsers() throws DBException {
@@ -55,31 +69,5 @@ public class UserServiceJDBC implements UserService {
             userServiceJDBC = new UserServiceJDBC();
         }
         return userServiceJDBC;
-    }
-
-
-    private static Connection getMysqlConnection() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            StringBuilder url = new StringBuilder();
-            url.
-                    append("jdbc:mysql://").                                        //db type
-                    append("localhost:").                                           //host name
-                    append("3306/").                                                //port
-                    append("db_pp1?").                                              //db name
-                    append("useUnicode=true&serverTimezone=UTC&useSSL=false")/*.    //timezone
-                    append("user=root&").                                           //login
-                    append("password=root")*/;                                      //password
-            System.out.println("URL: " + url + "\n");
-            Connection connection = DriverManager.getConnection(url.toString(), "root", "root");
-            return connection;
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new IllegalStateException();
-        }
-    }
-
-    private static UserJdbcDAO getUserDAO() {
-        return new UserJdbcDAO(getMysqlConnection());
     }
 }

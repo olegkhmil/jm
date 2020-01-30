@@ -3,14 +3,20 @@ package dao;
 import exception.DBException;
 import model.User;
 import org.hibernate.*;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import util.DBHelper;
 
 import java.util.List;
 
 public class UserHibernateDAO implements UserDAO {
     private static UserHibernateDAO userHibernateDAO;
-    private SessionFactory sessionFactory = DBHelper.getSessionFactory();
+    private SessionFactory sessionFactory;
 
+    private UserHibernateDAO() {
+        sessionFactory = getSessionFactory();
+    }
 
     public static UserHibernateDAO getInstance() {
         if (userHibernateDAO == null) {
@@ -18,8 +24,18 @@ public class UserHibernateDAO implements UserDAO {
         }
         return userHibernateDAO;
     }
-
-    private UserHibernateDAO() {
+    private SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            sessionFactory = createSessionFactory();
+        }
+        return sessionFactory;
+    }
+    private SessionFactory createSessionFactory() {
+        Configuration configuration = DBHelper.getInstance().getMySqlConfiguration();
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+        builder.applySettings(configuration.getProperties());
+        ServiceRegistry serviceRegistry = builder.build();
+        return configuration.buildSessionFactory(serviceRegistry);
     }
 
     @Override

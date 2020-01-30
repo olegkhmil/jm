@@ -2,16 +2,24 @@ package dao;
 
 import exception.DBException;
 import model.User;
+import util.DBHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserJdbcDAO implements UserDAO {
+    private static UserJdbcDAO userJdbcDAO;
     private Connection connection;
 
-    public UserJdbcDAO(Connection connection) {
-        this.connection = connection;
+    private UserJdbcDAO() {
+        connection = DBHelper.getInstance().getMysqlConnection();
+    }
+    public static UserJdbcDAO getInstance() {
+        if (userJdbcDAO == null) {
+            userJdbcDAO = new UserJdbcDAO();
+        }
+        return userJdbcDAO;
     }
 
     public List<User> readAllUsers() {

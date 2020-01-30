@@ -1,17 +1,26 @@
 package service;
 
+import dao.UserDAO;
 import dao.UserHibernateDAO;
+import daoFactory.UserDaoFactory;
 import exception.DBException;
 import model.User;
+import util.PropertyReader;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 
 public class UserServiceHibernate implements UserService {
     private static UserServiceHibernate userServiceHibernate;
-    private UserHibernateDAO userHibernateDAO;
+    private UserDAO userDAO;
 
     private UserServiceHibernate() {
-        userHibernateDAO = UserHibernateDAO.getInstance();
+        UserDaoFactory userDaoFactory = new UserDaoFactory();
+        Path propFile = Paths.get("C:\\ideaProj\\jm_study\\part1\\src\\main\\resources\\db.properties");
+        Properties properties = PropertyReader.getProperties(propFile.toAbsolutePath().toString());
+        userDAO = userDaoFactory.getUserDAO(properties.getProperty("daoTypeH"));
     }
 
     public static UserServiceHibernate getInstanceUSH() {
@@ -24,35 +33,35 @@ public class UserServiceHibernate implements UserService {
 
     @Override
     public List<User> getAllUsers() throws DBException {
-        return userHibernateDAO.readAllUsers();
+        return userDAO.readAllUsers();
     }
 
     @Override
     public User getUserById(Long id) throws DBException {
-        return userHibernateDAO.getUserById(id);
+        return userDAO.getUserById(id);
     }
 
     @Override
     public boolean addUser(String name, int age, String email, String password) throws DBException {
-        if (userHibernateDAO.getUserByEmail(email) == null) {
-            return userHibernateDAO.createUser(name, age, email, password) > 0;
+        if (userDAO.getUserByEmail(email) == null) {
+            return userDAO.createUser(name, age, email, password) > 0;
         } else return false;
     }
 
     @Override
     public boolean deleteUser(Long id) throws DBException {
-        if (userHibernateDAO.getUserById(id) != null) {
-            userHibernateDAO.deleteUser(id);
+        if (userDAO.getUserById(id) != null) {
+            userDAO.deleteUser(id);
             return true;
         } else return false;
     }
 
     @Override
     public boolean updateUser(Long id, String name, int age, String email, String password) throws DBException {
-        if (userHibernateDAO.getUserById(id) != null
-                && (userHibernateDAO.getUserByEmail(email) == null ||
-                userHibernateDAO.getUserByEmail(email).getId().equals(id))) {
-            userHibernateDAO.updateUser(id, name, age, email, password);
+        if (userDAO.getUserById(id) != null
+                && (userDAO.getUserByEmail(email) == null ||
+                userDAO.getUserByEmail(email).getId().equals(id))) {
+            userDAO.updateUser(id, name, age, email, password);
             return true;
         } else return false;
     }
