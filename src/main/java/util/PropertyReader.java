@@ -7,10 +7,10 @@ import java.util.Properties;
 
 public class PropertyReader {
 
-    public static Properties getProperties(){
+    public static Properties getProperties(String fileName){
         Properties properties = new Properties();
         try {
-             properties.load(PropertyReader.class.getClassLoader().getResourceAsStream("db.properties"));
+             properties.load(PropertyReader.class.getClassLoader().getResourceAsStream(fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }

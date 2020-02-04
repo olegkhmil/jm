@@ -18,8 +18,7 @@ public class UserServiceHibernate implements UserService {
 
     private UserServiceHibernate() {
         UserDaoFactory userDaoFactory = new UserDaoFactory();
-        Path propFile = Paths.get("C:\\ideaProj\\jm_study\\part1\\src\\main\\resources\\db.properties");
-        Properties properties = PropertyReader.getProperties();
+        Properties properties = PropertyReader.getProperties("db.properties");
         userDAO = userDaoFactory.getUserDAO(properties.getProperty("daoTypeH"));
     }
 

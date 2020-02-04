@@ -35,7 +35,7 @@ public class DBHelper {
 
     public  Connection getMysqlConnection() {
         if(connection == null) {
-            Properties properties = PropertyReader.getProperties();
+            Properties properties = PropertyReader.getProperties("db.properties");
             try {
                 Class.forName(properties.getProperty("driverSQL"));
                 connection=  DriverManager.getConnection(properties.getProperty("url"),
@@ -53,7 +53,7 @@ public class DBHelper {
         configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
 
-        Properties properties = PropertyReader.getProperties();
+        Properties properties = PropertyReader.getProperties("db.properties");
 
         configuration.setProperty("hibernate.dialect", properties.getProperty("dialect"));
         configuration.setProperty("hibernate.connection.driver_class", properties.getProperty("driverSQL"));
