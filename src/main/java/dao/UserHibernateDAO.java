@@ -24,12 +24,14 @@ public class UserHibernateDAO implements UserDAO {
         }
         return userHibernateDAO;
     }
+
     private SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             sessionFactory = createSessionFactory();
         }
         return sessionFactory;
     }
+
     private SessionFactory createSessionFactory() {
         Configuration configuration = DBHelper.getInstance().getMySqlConfiguration();
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
@@ -41,7 +43,7 @@ public class UserHibernateDAO implements UserDAO {
     @Override
     public List<User> readAllUsers() throws DBException {
         Session session = sessionFactory.openSession();
-        List<User>users;
+        List<User> users;
         try {
             Query query = session.createQuery("from User");
             users = (List<User>) query.list();
@@ -74,7 +76,7 @@ public class UserHibernateDAO implements UserDAO {
             User user = (User) session.get(User.class, userId);
             session.close();
             return user;
-        }catch (HibernateException e){
+        } catch (HibernateException e) {
             throw new DBException(e);
         }
     }
@@ -106,7 +108,7 @@ public class UserHibernateDAO implements UserDAO {
             query.executeUpdate();
             transaction.commit();
             session.close();
-        }catch (HibernateException e){
+        } catch (HibernateException e) {
             transaction.rollback();
             session.close();
             throw new DBException(e);
@@ -117,7 +119,7 @@ public class UserHibernateDAO implements UserDAO {
     public void updateUser(Long id, String name, int age, String email, String password) throws DBException {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        try{
+        try {
             Query query = session.createQuery(
                     "update User set name=:name, age=:age, email=:email, password=:password where id=:id");
             query.setParameter("name", name);
@@ -128,7 +130,7 @@ public class UserHibernateDAO implements UserDAO {
             query.executeUpdate();
             transaction.commit();
             session.close();
-        }catch (HibernateException e){
+        } catch (HibernateException e) {
             transaction.rollback();
             session.close();
             throw new DBException(e);

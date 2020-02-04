@@ -1,14 +1,11 @@
 package service;
 
 import dao.UserDAO;
-import dao.UserHibernateDAO;
 import daoFactory.UserDaoFactory;
 import exception.DBException;
 import model.User;
 import util.PropertyReader;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 

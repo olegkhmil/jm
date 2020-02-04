@@ -4,7 +4,6 @@ import exception.DBException;
 import model.User;
 import service.UserService;
 import service.UserServiceHibernate;
-import service.UserServiceJDBC;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +16,6 @@ import java.util.List;
 @WebServlet("/delete")
 public class DeleteUser extends HttpServlet {
     private UserService userService = UserServiceHibernate.getInstanceUSH();
-
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        req.getRequestDispatcher("/WEB-INF/view/delete.jsp").forward(req, resp);
-//    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,7 +43,6 @@ public class DeleteUser extends HttpServlet {
             resp.setStatus(500);
             req.setAttribute("result", "DB ERROR");
             req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
-
         }
     }
 }

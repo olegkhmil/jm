@@ -5,9 +5,9 @@ import dao.UserHibernateDAO;
 import dao.UserJdbcDAO;
 
 public class UserDaoFactory {
-    public UserDAO getUserDAO(String daoType){
+    public UserDAO getUserDAO(String daoType) {
         UserDAO dao;
-        switch (daoType){
+        switch (daoType) {
             case "hibernate":
                 dao = UserHibernateDAO.getInstance();
                 break;

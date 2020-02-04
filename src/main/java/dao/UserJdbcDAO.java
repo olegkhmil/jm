@@ -15,6 +15,7 @@ public class UserJdbcDAO implements UserDAO {
     private UserJdbcDAO() {
         connection = DBHelper.getInstance().getMysqlConnection();
     }
+
     public static UserJdbcDAO getInstance() {
         if (userJdbcDAO == null) {
             userJdbcDAO = new UserJdbcDAO();

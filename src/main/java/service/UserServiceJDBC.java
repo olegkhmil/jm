@@ -4,14 +4,8 @@ import dao.UserDAO;
 import daoFactory.UserDaoFactory;
 import exception.DBException;
 import model.User;
-import dao.UserJdbcDAO;
 import util.PropertyReader;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
@@ -25,8 +19,8 @@ public class UserServiceJDBC implements UserService {
         userDAO = userDaoFactory.getUserDAO(properties.getProperty("daoTypeJ"));
     }
 
-    public static UserServiceJDBC getInstance(){
-        if(userServiceJDBC == null){
+    public static UserServiceJDBC getInstance() {
+        if (userServiceJDBC == null) {
             userServiceJDBC = new UserServiceJDBC();
         }
         return userServiceJDBC;
@@ -42,10 +36,10 @@ public class UserServiceJDBC implements UserService {
     }
 
     public boolean addUser(String name, int age, String email, String password) throws DBException {
-            if (userDAO.getUserByEmail(email) == null) {
-                userDAO.createUser(name, age, email, password);
-                return true;
-            } else return false;
+        if (userDAO.getUserByEmail(email) == null) {
+            userDAO.createUser(name, age, email, password);
+            return true;
+        } else return false;
     }
 
     public boolean deleteUser(Long id) throws DBException {

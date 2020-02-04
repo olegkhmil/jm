@@ -1,19 +1,9 @@
 package util;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 
-import exception.DBException;
 import model.User;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.internal.SessionFactoryImpl;
-import org.hibernate.service.ServiceRegistry;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,24 +11,25 @@ import java.util.Properties;
 
 public class DBHelper {
     private static DBHelper dbHelper;
-    private  Connection connection;
-    private  Configuration configuration;
+    private Connection connection;
+    private Configuration configuration;
 
     private DBHelper() {
     }
-    public static DBHelper getInstance(){
-        if(dbHelper == null){
+
+    public static DBHelper getInstance() {
+        if (dbHelper == null) {
             dbHelper = new DBHelper();
         }
         return dbHelper;
     }
 
-    public  Connection getMysqlConnection() {
-        if(connection == null) {
+    public Connection getMysqlConnection() {
+        if (connection == null) {
             Properties properties = PropertyReader.getProperties("db.properties");
             try {
                 Class.forName(properties.getProperty("driverSQL"));
-                connection=  DriverManager.getConnection(properties.getProperty("url"),
+                connection = DriverManager.getConnection(properties.getProperty("url"),
                         properties.getProperty("username"),
                         properties.getProperty("password"));
             } catch (SQLException | ClassNotFoundException e) {
@@ -54,7 +45,6 @@ public class DBHelper {
         configuration.addAnnotatedClass(User.class);
 
         Properties properties = PropertyReader.getProperties("db.properties");
-
         configuration.setProperty("hibernate.dialect", properties.getProperty("dialect"));
         configuration.setProperty("hibernate.connection.driver_class", properties.getProperty("driverSQL"));
         configuration.setProperty("hibernate.connection.url", properties.getProperty("url"));
