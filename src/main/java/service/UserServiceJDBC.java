@@ -21,8 +21,7 @@ public class UserServiceJDBC implements UserService {
 
     private UserServiceJDBC() {
         UserDaoFactory userDaoFactory = new UserDaoFactory();
-        Path propFile = Paths.get("C:\\ideaProj\\jm_study\\part1\\src\\main\\resources\\db.properties");
-        Properties properties = PropertyReader.getProperties(propFile.toAbsolutePath().toString());
+        Properties properties = PropertyReader.getProperties();
         userDAO = userDaoFactory.getUserDAO(properties.getProperty("daoTypeJ"));
     }
 

@@ -1,5 +1,7 @@
 package util;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,8 +35,7 @@ public class DBHelper {
 
     public  Connection getMysqlConnection() {
         if(connection == null) {
-            Path propFile = Paths.get("C:\\ideaProj\\jm_study\\part1\\src\\main\\resources\\db.properties");
-            Properties properties = PropertyReader.getProperties(propFile.toAbsolutePath().toString());
+            Properties properties = PropertyReader.getProperties();
             try {
                 Class.forName(properties.getProperty("driverSQL"));
                 connection=  DriverManager.getConnection(properties.getProperty("url"),
@@ -51,8 +52,8 @@ public class DBHelper {
     public Configuration getMySqlConfiguration() {
         configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
-        Path propFile = Paths.get("C:\\ideaProj\\jm_study\\part1\\src\\main\\resources\\db.properties");
-        Properties properties = PropertyReader.getProperties(propFile.toAbsolutePath().toString());
+
+        Properties properties = PropertyReader.getProperties();
 
         configuration.setProperty("hibernate.dialect", properties.getProperty("dialect"));
         configuration.setProperty("hibernate.connection.driver_class", properties.getProperty("driverSQL"));
