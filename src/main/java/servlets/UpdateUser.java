@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/update")
+@WebServlet("/admin/update")
 public class UpdateUser extends HttpServlet {
     private UserService userService = UserServiceHibernate.getInstanceUSH();
 
@@ -37,7 +37,8 @@ public class UpdateUser extends HttpServlet {
             int age = Integer.parseInt(req.getParameter("age"));
             String email = req.getParameter("email");
             String password = req.getParameter("password");
-            if (userService.updateUser(id, name, age, email, password)) {
+            String role = req.getParameter("role");
+            if (userService.updateUser(id, name, age, email, password, role)) {
                 List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
                 req.setAttribute("usersFromDB", users);
                 req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);

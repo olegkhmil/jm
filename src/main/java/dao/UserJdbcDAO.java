@@ -75,12 +75,13 @@ public class UserJdbcDAO implements UserDAO {
         return null;
     }
 
-    public Long createUser(String name, int age, String email, String password) throws DBException {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, age, email, password) VALUES (?,?,?,?)")) {
+    public Long createUser(String name, int age, String email, String password, String role) throws DBException {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, age, email, password, role) VALUES (?,?,?,?,?)")) {
             statement.setString(1, name);
             statement.setInt(2, age);
             statement.setString(3, email);
             statement.setString(4, password);
+            statement.setString(5, role);
             statement.executeUpdate();
             return 1L;
         } catch (SQLException e) {
@@ -96,16 +97,17 @@ public class UserJdbcDAO implements UserDAO {
         }
     }
 
-    public void updateUser(Long id, String name, int age, String email, String password) throws DBException {
+    public void updateUser(Long id, String name, int age, String email, String password, String role) throws DBException {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "UPDATE users SET name = ?,age=?,email=?,password=? WHERE id = ?")) {
+                "UPDATE users SET name = ?, age=?, email=?, password=?, role=? WHERE id = ?")) {
             connection.setAutoCommit(false);
             preparedStatement.setString(1, name);
             preparedStatement.setInt(2, age);
             preparedStatement.setString(3, email);
             preparedStatement.setString(4, password);
-            preparedStatement.setLong(5, id);
+            preparedStatement.setString(5, role);
+            preparedStatement.setLong(6, id);
             preparedStatement.executeUpdate();
             connection.commit();
             connection.setAutoCommit(true);

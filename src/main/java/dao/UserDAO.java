@@ -12,10 +12,10 @@ public interface UserDAO {
 
     User getUserById(Long userId) throws DBException;
 
-    Long createUser(String name, int age, String email, String password) throws DBException;
+    Long createUser(String name, int age, String email, String password, String role) throws DBException;
 
     void deleteUser(Long id) throws DBException;
 
-    void updateUser(Long id, String name, int age, String email, String password) throws DBException;
+    void updateUser(Long id, String name, int age, String email, String password, String role) throws DBException;
 
 }

@@ -82,12 +82,12 @@ public class UserHibernateDAO implements UserDAO {
     }
 
     @Override
-    public Long createUser(String name, int age, String email, String password) throws DBException {
+    public Long createUser(String name, int age, String email, String password, String role) throws DBException {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         Long id;
         try {
-            id = (Long) session.save(new User(name, age, email, password));
+            id = (Long) session.save(new User(name, age, email, password, role));
             transaction.commit();
             session.close();
             return id;
@@ -116,16 +116,17 @@ public class UserHibernateDAO implements UserDAO {
     }
 
     @Override
-    public void updateUser(Long id, String name, int age, String email, String password) throws DBException {
+    public void updateUser(Long id, String name, int age, String email, String password, String role) throws DBException {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
             Query query = session.createQuery(
-                    "update User set name=:name, age=:age, email=:email, password=:password where id=:id");
+                    "update User set name=:name, age=:age, email=:email, password=:password, role=:role where id=:id");
             query.setParameter("name", name);
             query.setParameter("age", age);
             query.setParameter("email", email);
             query.setParameter("password", password);
+            query.setParameter("role", role);
             query.setParameter("id", id);
             query.executeUpdate();
             transaction.commit();

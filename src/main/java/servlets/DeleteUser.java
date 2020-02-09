@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/delete")
+@WebServlet("/admin/delete")
 public class DeleteUser extends HttpServlet {
     private UserService userService = UserServiceHibernate.getInstanceUSH();
 

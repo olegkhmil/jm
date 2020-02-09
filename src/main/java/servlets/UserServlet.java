@@ -9,19 +9,26 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/all")
+@WebServlet("/user")
 public class UserServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //resp.sendRedirect("https://www.google.com");
+        HttpSession session = req.getSession(false);
+        User user = null;
         try {
-            List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
-            req.setAttribute("usersFromDB", users);
-            req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
+            if(session != null && session.getAttribute("email") != null) {
+                user = UserServiceHibernate.getInstanceUSH().getUserByEmail((String) session.getAttribute("email"));
+            }
+            if(user != null && user.getPassword().equals(session.getAttribute("password"))) {
+                req.setAttribute("user", user);
+                req.getRequestDispatcher("/WEB-INF/view/userPage.jsp").forward(req, resp);
+            }else{
+                req.setAttribute("message", "HELLO");
+                req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
+            }
         } catch (DBException e) {
             resp.setStatus(500);
             req.setAttribute("result", "DB ERROR");

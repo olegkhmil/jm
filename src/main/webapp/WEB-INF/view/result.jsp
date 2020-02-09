@@ -9,7 +9,7 @@
 <table style=" width: 100%; border: 4px double black;">
     <tr>
         <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/all">All users</a>
+            <a href="${pageContext.servletContext.contextPath}/admin/all">All users</a>
         </td>
     </tr>
 </table>

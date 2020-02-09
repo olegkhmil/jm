@@ -38,9 +38,14 @@ public class UserServiceHibernate implements UserService {
     }
 
     @Override
-    public boolean addUser(String name, int age, String email, String password) throws DBException {
+    public User getUserByEmail(String email) throws DBException {
+        return userDAO.getUserByEmail(email);
+    }
+
+    @Override
+    public boolean addUser(String name, int age, String email, String password, String role) throws DBException {
         if (userDAO.getUserByEmail(email) == null) {
-            return userDAO.createUser(name, age, email, password) > 0;
+            return userDAO.createUser(name, age, email, password, role) > 0;
         } else return false;
     }
 
@@ -53,11 +58,11 @@ public class UserServiceHibernate implements UserService {
     }
 
     @Override
-    public boolean updateUser(Long id, String name, int age, String email, String password) throws DBException {
+    public boolean updateUser(Long id, String name, int age, String email, String password, String role) throws DBException {
         if (userDAO.getUserById(id) != null
                 && (userDAO.getUserByEmail(email) == null ||
                 userDAO.getUserByEmail(email).getId().equals(id))) {
-            userDAO.updateUser(id, name, age, email, password);
+            userDAO.updateUser(id, name, age, email, password, role);
             return true;
         } else return false;
     }

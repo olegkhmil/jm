@@ -17,7 +17,7 @@
 <table style=" width: 100%; border: 4px double black;">
     <tr>
         <td style="border: 1px solid black; text-align: center">
-            <a href="${pageContext.servletContext.contextPath}/add">Add new user</a>
+            <a href="${pageContext.servletContext.contextPath}/admin/add">Add new user</a>
         </td>
     </tr>
 </table>
@@ -30,6 +30,7 @@
         <th>User Age</th>
         <th>User email</th>
         <th>password</th>
+        <th>role</th>
         <th colspan="2">Action</th>
     </tr>
 
@@ -40,14 +41,15 @@
             <td>${user.age}</td>
             <td>${user.email}</td>
             <td>${user.password}</td>
+            <td>${user.role}</td>
             <td>
-                <form action="${pageContext.servletContext.contextPath}/delete" method="post">
+                <form action="${pageContext.servletContext.contextPath}/admin/delete" method="post">
                     <input type="number" hidden name="id" value="${user.id}"/>
                     <input type="submit" value="Delete"/>
                 </form>
             </td>
             <td>
-                <form action="${pageContext.servletContext.contextPath}/update" method="get">
+                <form action="${pageContext.servletContext.contextPath}/admin/update" method="get">
                     <input type="number" hidden name="id" value="${user.id}"/>
                     <input type="submit" value="Update"/>
                 </form>
