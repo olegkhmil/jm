@@ -18,6 +18,7 @@
     <tr>
         <td style="border: 1px solid black; text-align: center">
             <a href="${pageContext.servletContext.contextPath}/admin/add">Add new user</a>
+<%--            <a style="text-align: end" href="${pageContext.servletContext.contextPath}/logout">Logout</a>--%>
         </td>
     </tr>
 </table>

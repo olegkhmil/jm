@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter("/admin/*")
-public class LoginFilter implements Filter {
+public class AdminFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -23,17 +23,17 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
-        HttpSession session = req.getSession(true);
-        String email = req.getParameter("emailIndex");
-        String password = req.getParameter("passwordIndex");
-        boolean isParamExists = email != null && password != null;
-        if (isParamExists) {
-            session.setAttribute("email", email);
-            session.setAttribute("password", password);
-        }
-        if(session.getAttribute("email") == null){
+        HttpSession session = req.getSession(false);
+//        String email = req.getParameter("emailIndex");
+//        String password = req.getParameter("passwordIndex");
+//        boolean isParamExists = email != null && password != null;
+//        if (isParamExists) {
+//            session.setAttribute("email", email);
+//            session.setAttribute("password", password);
+//        }
+        if (session == null && session.getAttribute("email") == null) {
             req.setAttribute("message", "HELLO");
-            req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
+            req.getRequestDispatcher("/").forward(req, resp);
         }
         //boolean loggedIn = (session != null && session.getAttribute("Id") != null);
         try {
@@ -41,12 +41,12 @@ public class LoginFilter implements Filter {
 
             if (user != null) {
                 if ((user.getRole().equals("admin") &&
-                        user.getPassword().equals(
-                                session.getAttribute("password")))) {
+                        user.getPassword().equals(session.getAttribute("password")))) {
                     chain.doFilter(request, response);
-                } else if (user.getRole().equals("user") && user.getPassword().equals(session.getAttribute("password"))) {
+                } else if (user.getRole().equals("user") &&
+                        user.getPassword().equals(session.getAttribute("password"))) {
                     req.setAttribute("user", user);
-                    req.getRequestDispatcher("/WEB-INF/view/userPage.jsp").forward(req, resp);
+                    req.getServletContext().getRequestDispatcher("/user").forward(req, resp);
                 } else {
                     req.setAttribute("message", "Wrong password: " + session.getAttribute("password"));
                     req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
