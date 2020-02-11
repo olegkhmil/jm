@@ -17,7 +17,7 @@ public class AllUsersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //resp.sendRedirect("https://www.google.com");
         try {
-            List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
+            List<User> users = UserServiceHibernate.getInstance().getAllUsers();
             req.setAttribute("usersFromDB", users);
             //resp.sendRedirect(req.getContextPath() + "/admin/all");
             req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
@@ -31,7 +31,7 @@ public class AllUsersServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
+            List<User> users = UserServiceHibernate.getInstance().getAllUsers();
             req.setAttribute("usersFromDB", users);
             //resp.sendRedirect(req.getContextPath() + "/admin/all");
             req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);

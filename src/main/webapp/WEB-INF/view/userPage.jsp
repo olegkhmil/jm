@@ -6,7 +6,9 @@
     <title>user page</title>
 </head>
 <body>
-<%--<a style="text-align: end" href="${pageContext.servletContext.contextPath}/logout">Logout</a>--%>
+
+<a style="position: absolute; right: 25px" href="${pageContext.servletContext.contextPath}/logout">Logout</a>
+
     <p>
         <h1>Hello ${user.name}</h1>
     </p>

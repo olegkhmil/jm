@@ -20,14 +20,14 @@ public class UserServlet extends HttpServlet {
         User user = null;
         try {
             if(session != null && session.getAttribute("email") != null) {
-                user = UserServiceHibernate.getInstanceUSH().getUserByEmail((String) session.getAttribute("email"));
+                user = UserServiceHibernate.getInstance().getUserByEmail((String) session.getAttribute("email"));
             }
             if(user != null && user.getPassword().equals(session.getAttribute("password"))) {
                 req.setAttribute("user", user);
                 req.getRequestDispatcher("/WEB-INF/view/userPage.jsp").forward(req, resp);
             }else{
-                req.setAttribute("message", "HELLO");
-                req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
+                req.setAttribute("message", "HELLO User == null");
+                resp.sendRedirect(req.getContextPath() + "/");
             }
         } catch (DBException e) {
             resp.setStatus(500);

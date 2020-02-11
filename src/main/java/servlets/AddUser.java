@@ -27,10 +27,10 @@ public class AddUser extends HttpServlet {
             String email = req.getParameter("email");
             String password = req.getParameter("password");
             String role = req.getParameter("role");
-            if (UserServiceHibernate.getInstanceUSH().addUser(name, age, email, password, role)) {
-                List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
+            if (UserServiceHibernate.getInstance().addUser(name, age, email, password, role)) {
+                List<User> users = UserServiceHibernate.getInstance().getAllUsers();
                 req.setAttribute("usersFromDB", users);
-                req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
+                req.getRequestDispatcher("/admin/all").forward(req, resp);
             } else {
                 resp.setStatus(200);
                 req.setAttribute("result", "User with email: " + email + " exists");

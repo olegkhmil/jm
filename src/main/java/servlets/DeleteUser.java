@@ -15,7 +15,7 @@ import java.util.List;
 
 @WebServlet("/admin/delete")
 public class DeleteUser extends HttpServlet {
-    private UserService userService = UserServiceHibernate.getInstanceUSH();
+    private UserService userService = UserServiceHibernate.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,7 +26,7 @@ public class DeleteUser extends HttpServlet {
                     Long.parseLong(
                             req.getParameter("id"));
             if (userService.deleteUser(id)) {
-                List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
+                List<User> users = UserServiceHibernate.getInstance().getAllUsers();
                 req.setAttribute("usersFromDB", users);
                 req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
             } else {

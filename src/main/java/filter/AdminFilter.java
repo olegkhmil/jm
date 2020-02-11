@@ -2,6 +2,7 @@ package filter;
 
 import exception.DBException;
 import model.User;
+import service.UserService;
 import service.UserServiceHibernate;
 
 import javax.servlet.*;
@@ -13,6 +14,7 @@ import java.io.IOException;
 
 @WebFilter("/admin/*")
 public class AdminFilter implements Filter {
+    private UserService userService = UserServiceHibernate.getInstance();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -31,35 +33,36 @@ public class AdminFilter implements Filter {
 //            session.setAttribute("email", email);
 //            session.setAttribute("password", password);
 //        }
-        if (session == null && session.getAttribute("email") == null) {
-            req.setAttribute("message", "HELLO");
-            req.getRequestDispatcher("/").forward(req, resp);
-        }
-        //boolean loggedIn = (session != null && session.getAttribute("Id") != null);
-        try {
-            User user = UserServiceHibernate.getInstanceUSH().getUserByEmail((String) session.getAttribute("email"));
+        if (session == null || session.getAttribute("email") == null) {
+            req.setAttribute("message", "HELLO From Filter no session");
+            resp.sendRedirect(req.getContextPath() + "/");
+        } else {
+            try {
+                User user = userService.getUserByEmail((String) session.getAttribute("email"));
 
-            if (user != null) {
-                if ((user.getRole().equals("admin") &&
-                        user.getPassword().equals(session.getAttribute("password")))) {
-                    chain.doFilter(request, response);
-                } else if (user.getRole().equals("user") &&
-                        user.getPassword().equals(session.getAttribute("password"))) {
-                    req.setAttribute("user", user);
-                    req.getServletContext().getRequestDispatcher("/user").forward(req, resp);
+                if (user != null) {
+
+                    if ((user.getRole().equals("admin") &&
+                            user.getPassword().equals(session.getAttribute("password")))) {
+                        chain.doFilter(request, response);
+                    } else if (user.getRole().equals("user") &&
+                            user.getPassword().equals(session.getAttribute("password"))) {
+                        req.setAttribute("user", user);
+                        resp.sendRedirect(req.getContextPath() + "/user");
+                    } else {
+                        req.setAttribute("message", "Wrong password: " + session.getAttribute("password"));
+                        req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
+                    }
                 } else {
-                    req.setAttribute("message", "Wrong password: " + session.getAttribute("password"));
-                    req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
+                    resp.setStatus(400);
+                    req.setAttribute("message", "HELLO User == null");
+                    resp.sendRedirect(req.getContextPath() + "/");
                 }
-            } else {
-                resp.setStatus(400);
-                req.setAttribute("message", "HELLO");
-                req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
+            } catch (DBException e) {
+                resp.setStatus(500);
+                req.setAttribute("result", "DB ERROR");
+                req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
             }
-        } catch (DBException e) {
-            resp.setStatus(500);
-            req.setAttribute("result", "DB ERROR");
-            req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
         }
     }
 

@@ -15,8 +15,7 @@ public class UserServiceJDBC implements UserService {
 
     private UserServiceJDBC() {
         UserDaoFactory userDaoFactory = new UserDaoFactory();
-        Properties properties = PropertyReader.getProperties("db.properties");
-        userDAO = userDaoFactory.getUserDAO(properties.getProperty("daoTypeJ"));
+        userDAO = userDaoFactory.getUserDAO();
     }
 
     public static UserServiceJDBC getInstance() {

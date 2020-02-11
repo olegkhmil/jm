@@ -15,11 +15,10 @@ public class UserServiceHibernate implements UserService {
 
     private UserServiceHibernate() {
         UserDaoFactory userDaoFactory = new UserDaoFactory();
-        Properties properties = PropertyReader.getProperties("db.properties");
-        userDAO = userDaoFactory.getUserDAO(properties.getProperty("daoTypeH"));
+        userDAO = userDaoFactory.getUserDAO();
     }
 
-    public static UserServiceHibernate getInstanceUSH() {
+    public static UserServiceHibernate getInstance() {
         if (userServiceHibernate == null) {
             userServiceHibernate = new UserServiceHibernate();
         }

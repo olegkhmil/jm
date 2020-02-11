@@ -15,7 +15,7 @@ import java.util.List;
 
 @WebServlet("/admin/update")
 public class UpdateUser extends HttpServlet {
-    private UserService userService = UserServiceHibernate.getInstanceUSH();
+    private UserService userService = UserServiceHibernate.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,7 +39,7 @@ public class UpdateUser extends HttpServlet {
             String password = req.getParameter("password");
             String role = req.getParameter("role");
             if (userService.updateUser(id, name, age, email, password, role)) {
-                List<User> users = UserServiceHibernate.getInstanceUSH().getAllUsers();
+                List<User> users = userService.getAllUsers();
                 req.setAttribute("usersFromDB", users);
                 req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
             } else {
