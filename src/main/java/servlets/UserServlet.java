@@ -2,7 +2,7 @@ package servlets;
 
 import exception.DBException;
 import model.User;
-import service.UserServiceHibernate;
+import service.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +20,7 @@ public class UserServlet extends HttpServlet {
         User user = null;
         try {
             if(session != null && session.getAttribute("email") != null) {
-                user = UserServiceHibernate.getInstance().getUserByEmail((String) session.getAttribute("email"));
+                user = UserServiceImpl.getInstance().getUserByEmail((String) session.getAttribute("email"));
             }
             if(user != null && user.getPassword().equals(session.getAttribute("password"))) {
                 req.setAttribute("user", user);

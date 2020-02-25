@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter("/admin/*")
-public class AdminFilter implements Filter {
+@WebFilter
+public class UserFilter implements Filter {
     private UserService userService = UserServiceImpl.getInstance();
 
     @Override
@@ -27,11 +27,11 @@ public class AdminFilter implements Filter {
             try {
                 User user = userService.getUserByEmail((String) session.getAttribute("email"));
                 if (user != null) {
-                    if ((user.getRole().equals("admin") &&
-                            user.getPassword().equals(session.getAttribute("password")))) {
+                    if ((user.getRole().equals("admin") || (user.getRole().equals("user"))) &&
+                            user.getPassword().equals(session.getAttribute("password"))) {
                         chain.doFilter(request, response);
                     } else {
-                        req.setAttribute("message", "access denied");
+                        req.setAttribute("message", "Wrong Pass");
                         resp.sendRedirect(req.getContextPath() + "/");
                     }
                 } else {
@@ -48,9 +48,11 @@ public class AdminFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+
     }
 
     @Override
     public void destroy() {
+
     }
 }

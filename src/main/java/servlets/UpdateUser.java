@@ -3,7 +3,7 @@ package servlets;
 import exception.DBException;
 import model.User;
 import service.UserService;
-import service.UserServiceHibernate;
+import service.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @WebServlet("/admin/update")
 public class UpdateUser extends HttpServlet {
-    private UserService userService = UserServiceHibernate.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -3,7 +3,7 @@ package servlets;
 import exception.DBException;
 import model.User;
 import service.UserService;
-import service.UserServiceHibernate;
+import service.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @WebServlet("/admin/delete")
 public class DeleteUser extends HttpServlet {
-    private UserService userService = UserServiceHibernate.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,7 +26,7 @@ public class DeleteUser extends HttpServlet {
                     Long.parseLong(
                             req.getParameter("id"));
             if (userService.deleteUser(id)) {
-                List<User> users = UserServiceHibernate.getInstance().getAllUsers();
+                List<User> users = UserServiceImpl.getInstance().getAllUsers();
                 req.setAttribute("usersFromDB", users);
                 req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
             } else {

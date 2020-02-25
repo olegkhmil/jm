@@ -4,29 +4,29 @@ import dao.UserDAO;
 import daoFactory.UserDaoFactory;
 import exception.DBException;
 import model.User;
-import util.PropertyReader;
 
 import java.util.List;
-import java.util.Properties;
 
-public class UserServiceJDBC implements UserService {
-    private static UserServiceJDBC userServiceJDBC;
+public class UserServiceImpl implements UserService {
+    private static UserServiceImpl userServiceImpl;
     private UserDAO userDAO;
 
-    private UserServiceJDBC() {
+    private UserServiceImpl() {
         UserDaoFactory userDaoFactory = new UserDaoFactory();
         userDAO = userDaoFactory.getUserDAO();
     }
 
-    public static UserServiceJDBC getInstance() {
-        if (userServiceJDBC == null) {
-            userServiceJDBC = new UserServiceJDBC();
+    public static UserServiceImpl getInstance() {
+        if (userServiceImpl == null) {
+            userServiceImpl = new UserServiceImpl();
         }
-        return userServiceJDBC;
+        return userServiceImpl;
     }
 
+
+    @Override
     public List<User> getAllUsers() throws DBException {
-        return userDAO.readAllUsers();  //may return null
+        return userDAO.readAllUsers();
     }
 
     @Override
@@ -39,13 +39,14 @@ public class UserServiceJDBC implements UserService {
         return userDAO.getUserByEmail(email);
     }
 
+    @Override
     public boolean addUser(String name, int age, String email, String password, String role) throws DBException {
         if (userDAO.getUserByEmail(email) == null) {
-            userDAO.createUser(name, age, email, password, role);
-            return true;
+            return userDAO.createUser(name, age, email, password, role) > 0;
         } else return false;
     }
 
+    @Override
     public boolean deleteUser(Long id) throws DBException {
         if (userDAO.getUserById(id) != null) {
             userDAO.deleteUser(id);
@@ -53,18 +54,14 @@ public class UserServiceJDBC implements UserService {
         } else return false;
     }
 
+    @Override
     public boolean updateUser(Long id, String name, int age, String email, String password, String role) throws DBException {
-        if (userDAO.getUserById(id) != null && userDAO.getUserByEmail(email) == null) {
+        if (userDAO.getUserById(id) != null
+                && (userDAO.getUserByEmail(email) == null ||
+                userDAO.getUserByEmail(email).getId().equals(id))) {
             userDAO.updateUser(id, name, age, email, password, role);
             return true;
         } else return false;
     }
 
-
-    public static UserServiceJDBC getInstanceJDBC() {
-        if (userServiceJDBC == null) {
-            userServiceJDBC = new UserServiceJDBC();
-        }
-        return userServiceJDBC;
-    }
 }

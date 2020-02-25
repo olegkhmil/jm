@@ -2,7 +2,7 @@ package servlets;
 
 import exception.DBException;
 import model.User;
-import service.UserServiceHibernate;
+import service.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,8 +27,8 @@ public class AddUser extends HttpServlet {
             String email = req.getParameter("email");
             String password = req.getParameter("password");
             String role = req.getParameter("role");
-            if (UserServiceHibernate.getInstance().addUser(name, age, email, password, role)) {
-                List<User> users = UserServiceHibernate.getInstance().getAllUsers();
+            if (UserServiceImpl.getInstance().addUser(name, age, email, password, role)) {
+                List<User> users = UserServiceImpl.getInstance().getAllUsers();
                 req.setAttribute("usersFromDB", users);
                 req.getRequestDispatcher("/admin/all").forward(req, resp);
             } else {

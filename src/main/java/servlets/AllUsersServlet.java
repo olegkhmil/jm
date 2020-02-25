@@ -2,7 +2,7 @@ package servlets;
 
 import exception.DBException;
 import model.User;
-import service.UserServiceHibernate;
+import service.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +17,8 @@ public class AllUsersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //resp.sendRedirect("https://www.google.com");
         try {
-            List<User> users = UserServiceHibernate.getInstance().getAllUsers();
+            List<User> users = UserServiceImpl.getInstance().getAllUsers();
             req.setAttribute("usersFromDB", users);
-            //resp.sendRedirect(req.getContextPath() + "/admin/all");
             req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
         } catch (DBException e) {
             resp.setStatus(500);
@@ -30,15 +29,6 @@ public class AllUsersServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            List<User> users = UserServiceHibernate.getInstance().getAllUsers();
-            req.setAttribute("usersFromDB", users);
-            //resp.sendRedirect(req.getContextPath() + "/admin/all");
-            req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
-        } catch (DBException e) {
-            resp.setStatus(500);
-            req.setAttribute("result", "DB ERROR");
-            req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
-        }
+        doGet(req, resp);
     }
 }
