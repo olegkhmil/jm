@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<form action="${pageContext.servletContext.contextPath}/" method="post">
+<form action="${pageContext.servletContext.contextPath}/login" method="post">
     <p align="center">
     <h1 align="center">Message: ${message}</h1>
         Email: <input type="text" name="emailIndex"/><br/>

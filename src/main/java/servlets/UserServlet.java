@@ -1,9 +1,5 @@
 package servlets;
 
-import exception.DBException;
-import model.User;
-import service.UserServiceImpl;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,22 +13,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
-        User user = null;
-        try {
-            if(session != null && session.getAttribute("email") != null) {
-                user = UserServiceImpl.getInstance().getUserByEmail((String) session.getAttribute("email"));
-            }
-            if(user != null && user.getPassword().equals(session.getAttribute("password"))) {
-                req.setAttribute("user", user);
-                req.getRequestDispatcher("/WEB-INF/view/userPage.jsp").forward(req, resp);
-            }else{
-                req.setAttribute("message", "HELLO User == null");
-                resp.sendRedirect(req.getContextPath() + "/");
-            }
-        } catch (DBException e) {
-            resp.setStatus(500);
-            req.setAttribute("result", "DB ERROR");
-            req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
-        }
+        req.setAttribute("user", session.getAttribute("user"));
+        req.getRequestDispatcher("/WEB-INF/view/userPage.jsp").forward(req, resp);
     }
 }

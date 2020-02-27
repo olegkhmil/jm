@@ -1,6 +1,5 @@
 package filter;
 
-import exception.DBException;
 import model.User;
 import service.UserService;
 import service.UserServiceImpl;
@@ -14,37 +13,34 @@ import java.io.IOException;
 
 @WebFilter("/admin/*")
 public class AdminFilter implements Filter {
-    private UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
-        HttpSession session = req.getSession();
-        if (session.getAttribute("email") == null) {
-            resp.sendRedirect(req.getContextPath() + "/");
-        } else {
-            try {
-                User user = userService.getUserByEmail((String) session.getAttribute("email"));
-                if (user != null) {
-                    if ((user.getRole().equals("admin") &&
-                            user.getPassword().equals(session.getAttribute("password")))) {
-                        chain.doFilter(request, response);
-                    } else {
-                        req.setAttribute("message", "access denied");
-                        resp.sendRedirect(req.getContextPath() + "/");
-                    }
+        HttpSession session = req.getSession(false);
+        try {
+            if (session != null && session.getAttribute("user") != null) {
+                User user = (User) session.getAttribute("user");
+                if (user != null && user.getRole().equals("admin")) {
+                    chain.doFilter(req, resp);
+                } else if (user != null && user.getRole().equals("user")) {
+                    resp.sendRedirect(req.getContextPath() + "/user");
                 } else {
-                    req.setAttribute("message", "User don't exists");
-                    resp.sendRedirect(req.getContextPath() + "/");
+                    session.removeAttribute("user");
+                    resp.sendRedirect(req.getContextPath() + "/login");
                 }
-            } catch (DBException e) {
-                resp.setStatus(500);
-                req.setAttribute("result", "DB ERROR");
-                req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/login");
             }
+        } catch (ClassCastException e) {
+            if (session != null && session.getAttribute("user") != null) {
+                session.removeAttribute("user");
+            }
+            resp.sendRedirect(req.getContextPath() + "/login");
         }
     }
+
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

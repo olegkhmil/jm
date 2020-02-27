@@ -1,5 +1,9 @@
 package servlets;
 
+import exception.DBException;
+import model.User;
+import service.UserServiceImpl;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/")
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+    private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -20,13 +25,23 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        if (req.getParameter("emailIndex") != null && req.getParameter("passwordIndex") != null) {//нужна проверка на валидность email
-            session.setAttribute("email", req.getParameter("emailIndex"));
-            session.setAttribute("password", req.getParameter("passwordIndex"));
-            resp.sendRedirect(req.getContextPath() + "/");
-        } else {
-            req.setAttribute("message", "please login");
-            req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
+        try {
+            if (req.getParameter("emailIndex") != null && req.getParameter("passwordIndex") != null) {//нужна проверка на валидность email
+                User user = userService.getUserByEmail(req.getParameter("emailIndex"));
+                if (user != null && user.getPassword().equals(req.getParameter("passwordIndex"))) {
+                    session.setAttribute("user", user);
+                    resp.sendRedirect(req.getContextPath() + "/login");
+                } else {
+                    req.setAttribute("message", "User don't exists or wrong password");
+                    req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
+                }
+            } else {
+                req.setAttribute("message", "User don't exists or wrong password");
+                req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
+            }
+        } catch (DBException e) {
+            req.setAttribute("result", "DB ERROR");
+            req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
         }
     }
 }

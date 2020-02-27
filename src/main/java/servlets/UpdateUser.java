@@ -39,9 +39,7 @@ public class UpdateUser extends HttpServlet {
             String password = req.getParameter("password");
             String role = req.getParameter("role");
             if (userService.updateUser(id, name, age, email, password, role)) {
-                List<User> users = userService.getAllUsers();
-                req.setAttribute("usersFromDB", users);
-                req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
+                resp.sendRedirect(req.getContextPath() + "/admin/all");
             } else {
                 resp.setStatus(200);
                 req.setAttribute("result", "User with this id don't exists or email already used");

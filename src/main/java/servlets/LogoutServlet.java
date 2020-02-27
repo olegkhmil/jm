@@ -13,7 +13,8 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().removeAttribute("email");
         req.getSession().removeAttribute("password");
+        req.getSession().removeAttribute("user");
         req.setAttribute("message", "please login");
-        resp.sendRedirect(req.getContextPath() + "/");
+        resp.sendRedirect(req.getContextPath() + "/login");
     }
 }

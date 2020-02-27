@@ -26,9 +26,7 @@ public class DeleteUser extends HttpServlet {
                     Long.parseLong(
                             req.getParameter("id"));
             if (userService.deleteUser(id)) {
-                List<User> users = UserServiceImpl.getInstance().getAllUsers();
-                req.setAttribute("usersFromDB", users);
-                req.getRequestDispatcher("/WEB-INF/view/allUsers.jsp").forward(req, resp);
+                resp.sendRedirect(req.getContextPath() + "/admin/all");
             } else {
                 resp.setStatus(200);
                 req.setAttribute("result", "User don't exists");

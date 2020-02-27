@@ -28,9 +28,7 @@ public class AddUser extends HttpServlet {
             String password = req.getParameter("password");
             String role = req.getParameter("role");
             if (UserServiceImpl.getInstance().addUser(name, age, email, password, role)) {
-                List<User> users = UserServiceImpl.getInstance().getAllUsers();
-                req.setAttribute("usersFromDB", users);
-                req.getRequestDispatcher("/admin/all").forward(req, resp);
+                resp.sendRedirect(req.getContextPath() + "/admin/all");
             } else {
                 resp.setStatus(200);
                 req.setAttribute("result", "User with email: " + email + " exists");
@@ -39,7 +37,6 @@ public class AddUser extends HttpServlet {
         } catch (NumberFormatException e) {
             resp.setStatus(400);
             req.setAttribute("result", "Wrong age");
-
             req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
         } catch (DBException e) {
             resp.setStatus(500);

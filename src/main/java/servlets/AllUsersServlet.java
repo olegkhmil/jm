@@ -15,7 +15,6 @@ public class AllUsersServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //resp.sendRedirect("https://www.google.com");
         try {
             List<User> users = UserServiceImpl.getInstance().getAllUsers();
             req.setAttribute("usersFromDB", users);
@@ -27,8 +26,8 @@ public class AllUsersServlet extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    }
+//    @Override
+//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        doGet(req, resp);
+//    }
 }
