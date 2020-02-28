@@ -1,10 +1,6 @@
 package filter;
 
-import daoFactory.UserDaoFactory;
-import exception.DBException;
 import model.User;
-import service.UserService;
-import service.UserServiceImpl;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -39,7 +35,7 @@ public class LoginFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 

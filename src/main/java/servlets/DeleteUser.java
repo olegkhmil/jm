@@ -1,7 +1,6 @@
 package servlets;
 
 import exception.DBException;
-import model.User;
 import service.UserService;
 import service.UserServiceImpl;
 
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/admin/delete")
 public class DeleteUser extends HttpServlet {
@@ -19,12 +17,8 @@ public class DeleteUser extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String param = req.getParameter("id");
-
         try {
-            Long id =
-                    Long.parseLong(
-                            req.getParameter("id"));
+            Long id = Long.parseLong(req.getParameter("id"));
             if (userService.deleteUser(id)) {
                 resp.sendRedirect(req.getContextPath() + "/admin/all");
             } else {

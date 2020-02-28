@@ -1,7 +1,6 @@
 package servlets;
 
 import exception.DBException;
-import model.User;
 import service.UserService;
 import service.UserServiceImpl;
 
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/admin/update")
 public class UpdateUser extends HttpServlet {
@@ -22,6 +20,10 @@ public class UpdateUser extends HttpServlet {
         try {
             req.setAttribute("user", userService.getUserById(Long.parseLong(req.getParameter("id"))));
             req.getRequestDispatcher("/WEB-INF/view/update.jsp").forward(req, resp);
+        } catch (NumberFormatException e) {
+            resp.setStatus(400);
+            req.setAttribute("result", "Use User table");
+            req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
         } catch (DBException e) {
             resp.setStatus(500);
             req.setAttribute("result", "DB ERROR");
@@ -45,11 +47,6 @@ public class UpdateUser extends HttpServlet {
                 req.setAttribute("result", "User with this id don't exists or email already used");
                 req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
             }
-
-        } catch (NumberFormatException e) {
-            resp.setStatus(400);
-            req.setAttribute("result", "Wrong id or age (use only numbers");
-            req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
         } catch (DBException e) {
             resp.setStatus(500);
             req.setAttribute("result", "DB ERROR");

@@ -1,9 +1,6 @@
 package filter;
 
-import exception.DBException;
 import model.User;
-import service.UserService;
-import service.UserServiceImpl;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -14,7 +11,6 @@ import java.io.IOException;
 
 @WebFilter("/user")
 public class UserFilter implements Filter {
-    private UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -43,7 +39,7 @@ public class UserFilter implements Filter {
 
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 

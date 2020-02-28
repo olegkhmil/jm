@@ -16,7 +16,7 @@ public class EmptyFilter  implements Filter {
         resp.sendRedirect(req.getContextPath() + "/login");
     }
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 
